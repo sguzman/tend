@@ -48,6 +48,31 @@ jobs:
             experimental-features = nix-command flakes
       - name: Build Tend through crate2nix
         run: nix build .#tend --print-build-logs
+      - name: Verify packaged launcher and desktop integration
+        shell: bash
+        run: |
+          test -x result/bin/tend
+          test -s result/share/applications/tend.desktop
+          test -s result/share/icons/hicolor/scalable/apps/tend.svg
+          grep -q '^Name=Tend
+
+  graph-freshness:
+    name: Verify committed crate2nix graph
+    runs-on: ubuntu-24.04
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v4
+      - uses: cachix/install-nix-action@v31
+        with:
+          extra_nix_config: |
+            experimental-features = nix-command flakes
+      - name: Regenerate Cargo.nix and require no diff
+        shell: bash
+        run: |
+          nix develop --command crate2nix generate -f Cargo.toml -o Cargo.nix
+          git diff --exit-code -- Cargo.nix
+ result/share/applications/tend.desktop
+          grep -q 'TEND_NIX_MANAGED' result/bin/tend
       - name: Check flake outputs
         run: nix flake check --print-build-logs
 
