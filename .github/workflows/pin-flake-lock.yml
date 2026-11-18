@@ -1,0 +1,27 @@
+name: Pin Tend Nix inputs (one-time)
+on:
+  push:
+    branches: ["tend/branding"]
+    paths: [".github/workflows/pin-flake-lock.yml"]
+
+permissions:
+  contents: write
+
+jobs:
+  lock:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - uses: cachix/install-nix-action@v31
+      - name: Lock inputs
+        run: nix flake lock
+      - name: Commit lockfile to development branch
+        shell: bash
+        run: |
+          git add flake.lock
+          if ! git diff --cached --quiet; then
+            git config user.name "github-actions[bot]"
+            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+            git commit -m "nix: pin flake dependencies"
+            git push origin HEAD:refs/heads/tend/branding
+          fi
