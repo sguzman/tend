@@ -11,6 +11,7 @@ use rust_embed::RustEmbed;
 #[folder = "../../assets"]
 #[include = "icons/**/*"]
 #[include = "icon/icon-64.png"]
+#[include = "icon/tend.svg"]
 #[include = "keymaps/**/*"]
 #[include = "fonts/**/*.ttf"]
 #[exclude = "*.DS_Store"]
