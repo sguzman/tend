@@ -185,7 +185,7 @@ fn main() -> Result<()> {
                 // macOS: the app moves the window from its own title bar.
                 app_owns_titlebar_drag: true,
                 // Overridable so that window-manager rules can target dev builds (used for UI screenshots).
-                app_id: Some(std::env::var("FERN_APP_ID").unwrap_or_else(|_| "fern-tasks".into())),
+                app_id: Some(std::env::var("FERN_APP_ID").unwrap_or_else(|_| "tend".into())),
                 window_min_size: Some(size(px(900.), px(400.))),
                 ..Default::default()
             },
