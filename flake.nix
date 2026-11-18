@@ -70,8 +70,7 @@
             postPatch = ''
               mkdir -p assets
               cp -R ${./assets}/. assets/
-              substituteInPlace src/assets.rs \\
-                --replace-fail '#[folder = "../../assets"]' '#[folder = "assets"]'
+              substituteInPlace src/assets.rs --replace-fail '#[folder = "../../assets"]' '#[folder = "assets"]'
             '';
           };
         };
