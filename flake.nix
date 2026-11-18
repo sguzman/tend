@@ -62,6 +62,18 @@
             nativeBuildInputs = [ p.pkg-config ];
             buildInputs = [ p.fontconfig ];
           };
+          # crate2nix isolates each path crate. RustEmbed's upstream
+          # ../../assets path no longer resolves from that isolated root.
+          # Give the assets crate its own copy during the Nix build only;
+          # the upstream Cargo source layout remains unchanged.
+          assets = _attrs: {
+            postPatch = ''
+              mkdir -p assets
+              cp -R ${./assets}/. assets/
+              substituteInPlace src/assets.rs \\
+                --replace-fail '#[folder = "../../assets"]' '#[folder = "assets"]'
+            '';
+          };
         };
       };
 
