@@ -91,9 +91,16 @@
 
         # Binary is still called fern internally until the crate-renaming work.
         # Tend's wrapper isolates data and opts out of the upstream auto-updater.
+        #
+        # On the target non-NixOS Arch host, the Vulkan ICD JSON refers to
+        # libGLX_nvidia.so.0 by soname. The Nix Vulkan loader cannot find the
+        # host's driver in /usr/lib without adding that runtime directory.
+        # This does not bundle or pin a GPU driver in the Nix store.
+        # A future Home Manager targets.genericLinux.gpu wrapper can replace
+        # this Arch-specific compatibility path.
         makeWrapper "${desktop}/bin/fern" "$out/bin/tend" \
           --set TEND_NIX_MANAGED 1 \
-          --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath gpuiLibraries}"
+          --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath gpuiLibraries}:/usr/lib"
 
         install -m644 ${./assets/icon/tend.svg} "$out/share/icons/hicolor/scalable/apps/tend.svg"
         install -m644 ${./assets/linux/tend.desktop} "$out/share/applications/tend.desktop"
