@@ -13,7 +13,8 @@ Tend is a personalized, native Rust/GPUI desktop task manager forked from [Fern]
 - **Implemented:** separate default XDG data directory and an updater guard. Self-updates are disabled by default, including Nix-managed builds, without disabling daily backups.
 - **Guarded:** inherited Fern release jobs cannot run when the repository is `sguzman/tend`.
 - **Verified in GitHub Actions:** full `nix build .#tend`, `nix flake check`, `crate2nix` graph regeneration without a diff, and cross-platform Cargo CI on the development branch (`5aab04d8`, 2026-11-18). The Nix runner is not the target Hyprland/NVIDIA desktop.
-- **Not yet verified:** GUI launch/behavior under Hyprland/NVIDIA, backup/restore and migration with disposable data, performance, and independent release packaging. Keep PR #1 draft until those checks pass.
+- **Verified on EndeavourOS/Hyprland + NVIDIA:** Nix-packaged Tend opened with its native GUI after an Arch-specific host Vulkan library path was added to the launcher. A subsequent local change rebuilt only the application crate and wrapper while reusing per-crate dependencies. Task creation, notes, subtasks, and persistence after closing/reopening with the same disposable profile were demonstrated (2026-11-18).
+- **Still unverified:** desktop reminder delivery, task-link opening, GUI backup export and restore, migration from an existing Fern profile, performance, and independent release packaging. See [Linux QA](docs/qa-linux.md). Keep PR #1 and PR #2 draft until remaining relevant checks pass.
 - **Build-system detail:** on-demand crate2nix generation failed because vendoring a nested Zed Git-workspace crate dropped inherited workspace metadata. Generating `Cargo.nix` against the intact workspace succeeded in CI; the committed graph is still built per-crate.
 
 ## Milestone 0 — Baseline and fork hygiene

@@ -45,11 +45,13 @@ nom build .#tend
 nix run .#tend
 ```
 
-The base development branch has **passed** its complete `crate2nix` package
-build, `nix flake check`, and Cargo CI on GitHub Actions. These branding
-changes still need integration checks and a real desktop launch on
-EndeavourOS/Hyprland before installation is considered validated. See
-[the roadmap](ROADMAP.md) and [Nix guide](docs/nix.md) for the current state.
+The branded application has passed `crate2nix` and `nix flake check`
+in GitHub Actions, and its Nix launcher has opened successfully on
+EndeavourOS/Hyprland with NVIDIA. Task creation, notes, subtasks, and
+persistence across restart have passed interactive QA. Reminders, deep
+links, backup/restore through the GUI, and Home Manager deployment are
+still being validated. See the [Linux QA guide](docs/qa-linux.md),
+[roadmap](ROADMAP.md), and [Nix guide](docs/nix.md).
 
 Upstream also supports ordinary `cargo` builds:
 
