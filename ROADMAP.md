@@ -1,0 +1,74 @@
+# Tend roadmap
+
+Tend is a personalized, native Rust/GPUI desktop task manager forked from [Fern](https://github.com/atabits/fern). For now the goal is **a reliable, Nix-managed, independently branded application**—not a new feature set.
+
+**Scope:** Nixification, Tend identity, safe local data handling, verification, and routine upstream maintenance. No product features, backend rewrites, or hosted services are planned.
+
+**Status:** Planning; the checklist below identifies outstanding work, not work already completed.
+
+## Milestone 0 — Baseline and fork hygiene
+
+- [ ] Record the exact fork/upstream commit baseline and document how upstream changes are incorporated. Keep `main` available for upstream tracking; make downstream changes on a dedicated development branch and review before integration.
+- [ ] Verify that the unmodified desktop starts on EndeavourOS/Hyprland; note Wayland behavior, available X11 fallback, and any baseline warnings.
+- [ ] Run the existing workspace tests and document pre-existing failures separately from Tend regressions.
+- [ ] Preserve upstream attribution, copyright notices, the existing AGPL-3.0-or-later license, and any third-party license obligations.
+- [ ] Review inherited CI/release workflows before publishing: upstream scripts currently package and release artifacts as Fern.
+
+**Exit criterion:** baseline recorded, source builds/tests understood, no mistaken attribution or fork releases.
+
+## Milestone 1 — Reproducible Nix packaging (highest engineering priority)
+
+- [ ] Add `flake.nix` and `flake.lock`, exposing `packages.x86_64-linux.tend`, `apps.x86_64-linux.default`, and a development shell. Keep the first target limited to Linux x86_64.
+- [ ] Pin a compatible Rust toolchain and provide GPUI's native build/runtime dependencies in `nix develop` (Wayland/X11, xkbcommon, fontconfig/freetype, Vulkan, pkg-config and any dependencies discovered during build).
+- [ ] Integrate **`crate2nix`** for per-crate dependency derivations and caching; do **not** switch to Crane. Document a repeatable generation workflow for `Cargo.nix`.
+- [ ] Resolve the workspace's Git-sourced GPUI/GPUI-platform dependencies and Zed `[patch.crates-io]` entries reproducibly from locked revisions. Keep crate overrides small and documented.
+- [ ] Package the desktop application without requiring the optional sync server. Install the binary, desktop entry, icon assets, and required runtime wrapping in the Nix output.
+- [ ] Ensure execution never attempts to write inside `/nix/store`, and that bundled fonts/assets work once installed.
+- [ ] Add Nix build/check coverage in CI, in addition to upstream's Cargo checks. Verify `nix build`, `nix run` and `nix flake check`. `nom` may be used locally for clearer build output.
+- [ ] Once the package is proven, integrate Tend as a pinned input/package in the separate `sguzman/nix-store` Home Manager configuration; do not change that repository as part of this milestone without a separate reviewed change.
+
+**Exit criterion:** a clean, repeatable Nix build launches a working Tend desktop app, with per-crate caching demonstrated on a subsequent small source edit.
+
+## Milestone 2 — Independent Tend identity (without a data accident)
+
+- [ ] Change user-facing product names (window title, About text, notifications, visible strings, documentation, screenshots and release notes as applicable) from Fern to **Tend**, without falsifying project history.
+- [ ] Rename the distributable executable/package and desktop integration to `tend`; use a distinct desktop file and Wayland application ID so window rules target Tend.
+- [ ] Design/replace the application icon and relevant platform assets; preserve third-party notices and the origin of reused artwork.
+- [ ] Make **new Tend installations use their own application data/config locations** rather than silently opening or modifying Fern's `~/.local/share/fern-tasks/` profile. Review portable profiles, backups, attachments, settings, and links as part of this change.
+- [ ] Provide a documented, explicit backup/export-and-import migration path from Fern to Tend, tested on disposable sample data. Never automatically move, overwrite, or delete an existing Fern profile.
+- [ ] Disable or replace the inherited auto-updater for Nix-managed installs. In particular, no Tend build should download and replace itself with a release from `atabits/fern`.
+- [ ] Review remaining upstream-specific GitHub URLs, badges, workflow artifact names, bundle identifiers, installer metadata, and update endpoints. Keep **upstream attribution links** where attribution is appropriate.
+- [ ] Update the README to explain what Tend is, its relation to Fern, supported installation methods, data locations, and how to build it.
+
+**Exit criterion:** application and Linux desktop identify as Tend, Nix owns updates, Fern user data remains untouched, and upstream credit remains clear.
+
+## Milestone 3 — Validation and handoff
+
+- [ ] Smoke-test under EndeavourOS + Hyprland, particularly GPUI on NVIDIA/Wayland: launch, focus/keyboard input, scaling, fonts, window title, clipboard, drag-and-drop, and notifications.
+- [ ] Exercise existing task creation/editing, lists, recurring dates, calendar, attachments, backup and restore using a throwaway profile. This is regression testing, **not** feature development.
+- [ ] Verify restart/persistence, the correct Tend XDG data path, and no unexpected network update or automatic deployment behavior.
+- [ ] Confirm that a fresh install and an import from Fern can both be recovered from backups.
+- [ ] Run the existing Rust tests and the Nix checks in CI. Document known upstream issues without expanding the initial scope.
+- [ ] Create a concise developer/maintenance guide for regenerating crate2nix files, refreshing inputs, syncing upstream, and testing changes before updating the user's pinned installation.
+
+**Exit criterion:** Tend is usable as a daily desktop application, reproducibly packaged, separately branded, and maintainable without local manual fixes.
+
+## Maintenance policy
+
+- Prefer small, focused downstream changes that can be reconciled with upstream.
+- Keep core product behavior aligned with Fern until real usage reveals a concrete need. **There is no feature roadmap yet.**
+- Do not run, package, or deploy `fern-server` unless cross-device synchronization becomes an explicit requirement.
+- Review upstream changes for security fixes, schema migrations, GPUI dependency changes, and build changes before merging.
+- Before upgrades that change the SQLite schema, make and test a backup. Avoid automatic downgrade assumptions.
+- Preserve AGPL source, copyright, and attribution requirements when distributing modified versions.
+
+## Definition of done for this initial effort
+
+- [ ] `nix build`, `nix run`, and `nix flake check` pass for the supported Linux target.
+- [ ] `crate2nix` is generating reproducible, individually cached Rust dependencies.
+- [ ] The application installs, launches, and displays the **Tend** identity under Hyprland.
+- [ ] Tend and Fern profiles are separate, with documented migration and verified backups.
+- [ ] Nix-managed Tend cannot self-update from upstream Fern releases.
+- [ ] CI, attribution, and maintainer documentation reflect the fork.
+
+**After that:** use Tend normally. Add features only when actual experience gives us specific reasons to deviate from Fern.
