@@ -13,6 +13,19 @@ on:
       - "flake.lock"
       - "nix/**"
       - ".github/workflows/nix.yml"
+  pull_request:
+    branches: ["tend/dev"]
+    paths:
+      - "Cargo.toml"
+      - "Cargo.lock"
+      - "Cargo.nix"
+      - "crates/**"
+      - "apps/**"
+      - "assets/**"
+      - "flake.nix"
+      - "flake.lock"
+      - "nix/**"
+      - ".github/workflows/nix.yml"
   workflow_dispatch:
 
 permissions:
