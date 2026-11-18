@@ -13,6 +13,19 @@ on:
       - "flake.lock"
       - "nix/**"
       - ".github/workflows/nix.yml"
+  pull_request:
+    branches: ["tend/dev"]
+    paths:
+      - "Cargo.toml"
+      - "Cargo.lock"
+      - "Cargo.nix"
+      - "crates/**"
+      - "apps/**"
+      - "assets/**"
+      - "flake.nix"
+      - "flake.lock"
+      - "nix/**"
+      - ".github/workflows/nix.yml"
   workflow_dispatch:
 
 permissions:
@@ -33,12 +46,31 @@ jobs:
         with:
           extra_nix_config: |
             experimental-features = nix-command flakes
-      - name: Verify Cargo.nix is current
+      - name: Build Tend through crate2nix
+        run: nix build .#tend --print-build-logs
+      - name: Verify packaged Tend launcher and desktop metadata
+        shell: bash
+        run: |
+          test -x result/bin/tend
+          test -s result/share/applications/tend.desktop
+          test -s result/share/icons/hicolor/scalable/apps/tend.svg
+          grep -Fq 'Name=Tend' result/share/applications/tend.desktop
+          grep -Fq 'TEND_NIX_MANAGED' result/bin/tend
+      - name: Check flake outputs
+        run: nix flake check --print-build-logs
+
+  graph-freshness:
+    name: Verify committed crate2nix graph
+    runs-on: ubuntu-24.04
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v4
+      - uses: cachix/install-nix-action@v31
+        with:
+          extra_nix_config: |
+            experimental-features = nix-command flakes
+      - name: Regenerate Cargo.nix and require no diff
         shell: bash
         run: |
           nix develop --command crate2nix generate -f Cargo.toml -o Cargo.nix
           git diff --exit-code -- Cargo.nix
-      - name: Build Tend through crate2nix
-        run: nix build .#tend --print-build-logs
-      - name: Check flake outputs
-        run: nix flake check --print-build-logs
