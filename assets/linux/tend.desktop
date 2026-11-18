@@ -1,0 +1,10 @@
+[Desktop Entry]
+Type=Application
+Name=Tend
+GenericName=Task manager
+Comment=Native task manager based on Fern
+Exec=tend
+Icon=tend
+Terminal=false
+Categories=Office;ProjectManagement;
+StartupWMClass=tend
