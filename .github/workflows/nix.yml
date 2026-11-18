@@ -5,6 +5,7 @@ on:
     paths:
       - "Cargo.toml"
       - "Cargo.lock"
+      - "Cargo.nix"
       - "crates/**"
       - "apps/**"
       - "assets/**"
@@ -12,7 +13,6 @@ on:
       - "flake.lock"
       - "nix/**"
       - ".github/workflows/nix.yml"
-  pull_request:
   workflow_dispatch:
 
 permissions:
@@ -33,16 +33,11 @@ jobs:
         with:
           extra_nix_config: |
             experimental-features = nix-command flakes
-      - name: Lock inputs (until flake.lock is committed)
+      - name: Verify Cargo.nix is current
         shell: bash
         run: |
-          nix flake lock
-          git add flake.lock
-      - name: Preserve generated flake.lock
-        uses: actions/upload-artifact@v4
-        with:
-          name: tend-flake-lock
-          path: flake.lock
+          nix develop --command crate2nix generate -f Cargo.toml -o Cargo.nix
+          git diff --exit-code -- Cargo.nix
       - name: Build Tend through crate2nix
         run: nix build .#tend --print-build-logs
       - name: Check flake outputs
