@@ -90,7 +90,7 @@ fn add_icon(hwnd: HWND) -> bool {
     data.uFlags = NIF_ICON | NIF_MESSAGE | NIF_TIP | NIF_SHOWTIP;
     data.uCallbackMessage = TRAY_INPUT;
     data.hIcon = icon;
-    for (target, character) in data.szTip.iter_mut().zip("Fern".encode_utf16()) {
+    for (target, character) in data.szTip.iter_mut().zip("Tend".encode_utf16()) {
         *target = character;
     }
     if !unsafe { Shell_NotifyIconW(NIM_ADD, &data) }.as_bool() {
