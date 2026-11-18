@@ -1,0 +1,49 @@
+name: Nix (Tend)
+on:
+  push:
+    branches: ["tend/dev"]
+    paths:
+      - "Cargo.toml"
+      - "Cargo.lock"
+      - "crates/**"
+      - "apps/**"
+      - "assets/**"
+      - "flake.nix"
+      - "flake.lock"
+      - "nix/**"
+      - ".github/workflows/nix.yml"
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: nix-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  nix-linux:
+    name: x86_64-linux crate2nix package
+    runs-on: ubuntu-24.04
+    timeout-minutes: 120
+    steps:
+      - uses: actions/checkout@v4
+      - uses: cachix/install-nix-action@v31
+        with:
+          extra_nix_config: |
+            experimental-features = nix-command flakes
+      - name: Lock inputs (until flake.lock is committed)
+        shell: bash
+        run: |
+          nix flake lock
+          git add flake.lock
+      - name: Preserve generated flake.lock
+        uses: actions/upload-artifact@v4
+        with:
+          name: tend-flake-lock
+          path: flake.lock
+      - name: Build Tend through crate2nix
+        run: nix build .#tend --print-build-logs
+      - name: Check flake outputs
+        run: nix flake check --print-build-logs
