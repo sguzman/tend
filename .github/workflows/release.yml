@@ -17,6 +17,9 @@ env:
 
 jobs:
   package:
+    # Inherited Fern release workflow is intentionally disabled for Tend
+    # until its platform artifacts, signing and updater are independently branded.
+    if: github.repository == 'atabits/fern'
     name: ${{ matrix.target }}
     runs-on: ${{ matrix.os }}
     strategy:
@@ -155,7 +158,7 @@ jobs:
   release:
     name: GitHub release
     # The same as RELEASE above: a job's `if` cannot read `env`.
-    if: inputs.release && github.ref == 'refs/heads/main'
+    if: inputs.release && github.ref == 'refs/heads/main' && github.repository == 'atabits/fern'
     needs: package
     runs-on: ubuntu-24.04
     permissions:

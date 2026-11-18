@@ -80,7 +80,7 @@ pub fn data_dir() -> Result<std::path::PathBuf> {
     if let Some(dir) = portable::data_dir() {
         return Ok(dir.to_owned());
     }
-    Ok(dirs::data_dir().context("cannot determine the user data directory")?.join("fern-tasks"))
+    Ok(dirs::data_dir().context("cannot determine the user data directory")?.join("tend"))
 }
 
 /// Where temporary files for printing and backup exports are written.
@@ -185,7 +185,7 @@ fn main() -> Result<()> {
                 // macOS: the app moves the window from its own title bar.
                 app_owns_titlebar_drag: true,
                 // Overridable so that window-manager rules can target dev builds (used for UI screenshots).
-                app_id: Some(std::env::var("FERN_APP_ID").unwrap_or_else(|_| "fern-tasks".into())),
+                app_id: Some(std::env::var("FERN_APP_ID").unwrap_or_else(|_| "tend".into())),
                 window_min_size: Some(size(px(900.), px(400.))),
                 ..Default::default()
             },

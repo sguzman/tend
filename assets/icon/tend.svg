@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" role="img" aria-label="Tend">
+  <title>Tend</title>
+  <!-- Soft, restrained sprout mark on a dark mineral surface. -->
+  <rect width="256" height="256" rx="58" fill="#25312c"/>
+  <path d="M123 190c0-33 1-62 10-88" fill="none"
+        stroke="#e8eee5" stroke-width="13" stroke-linecap="round"/>
+  <path d="M131 128c-31 1-52-14-57-44 33-3 55 12 57 44Z"
+        fill="#a9c6ad"/>
+  <path d="M134 112c5-32 24-49 55-51-2 33-22 51-55 51Z"
+        fill="#c7d9bc"/>
+  <path d="M103 190h45" fill="none" stroke="#e8eee5"
+        stroke-width="13" stroke-linecap="round"/>
+</svg>
