@@ -78,8 +78,11 @@ upstream. Tend aims to keep downstream changes small, preserve compatibility
 where practical, and integrate upstream fixes after review. The original
 project's authorship is not claimed as Tend's authorship.
 
-See [ROADMAP.md](ROADMAP.md) for outstanding work. New features will be
-considered only after using the application and identifying concrete needs.
+See [ROADMAP.md](ROADMAP.md) for outstanding work, the
+[safe Fern-to-Tend migration guide](docs/migration.md) for existing data,
+and the [upstream maintenance policy](docs/upstream.md) for maintaining
+the fork. New features will be considered only after using the application
+and identifying concrete needs.
 
 ## License and credits
 
