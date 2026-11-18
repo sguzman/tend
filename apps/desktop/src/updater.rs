@@ -17,7 +17,7 @@ use sha2::{Digest as _, Sha256};
 
 use crate::release_notes::{CURRENT_VERSION, ReleaseNotes, is_newer};
 
-const LATEST_RELEASE: &str = "https://api.github.com/repos/atabits/fern/releases/latest";
+const LATEST_RELEASE: &str = "https://api.github.com/repos/sguzman/tend/releases/latest";
 /// Not right at startup, so that the first frame does not wait on the network.
 const FIRST_CHECK_AFTER: Duration = Duration::from_secs(10);
 const CHECK_EVERY: Duration = Duration::from_secs(6 * 60 * 60);
@@ -52,13 +52,16 @@ impl Global for GlobalUpdater {}
 
 /// Starts the checks, unless this is a development build.
 pub fn init(store: Rc<Store>, cx: &mut App) {
-    // Nix-managed Tend installations must never fetch or replace themselves
-    // with a binary from the original Fern release channel.
-    // Keep daily backups enabled; FERN_DEV_STATE would also suppress them.
-    let install = if std::env::var_os("TEND_NIX_MANAGED").is_some() {
-        None
-    } else {
+    // Tend has no independent release channel yet. Keep self-updates disabled
+    // by default on ALL builds, not just Nix installs. Future release builds
+    // may opt in deliberately; Nix-managed builds can never self-update.
+    // Do not use FERN_DEV_STATE here: that would also disable daily backups.
+    let install = if option_env!("TEND_ALLOW_SELF_UPDATE").is_some()
+        && std::env::var_os("TEND_NIX_MANAGED").is_none()
+    {
         Install::current()
+    } else {
+        None
     };
     if let Some(install) = &install {
         install.clean_up();
