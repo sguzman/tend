@@ -74,7 +74,9 @@ pub fn data_dir() -> Result<std::path::PathBuf> {
     // Debug builds can be pointed at throwaway data, so that checking a change leaves the real
     // data alone.
     #[cfg(debug_assertions)]
-    if let Some(dir) = std::env::var_os("FERN_DATA_DIR") {
+    if let Some(dir) = std::env::var_os("TEND_DATA_DIR")
+        .or_else(|| std::env::var_os("FERN_DATA_DIR"))
+    {
         return Ok(dir.into());
     }
     if let Some(dir) = portable::data_dir() {
@@ -185,7 +187,9 @@ fn main() -> Result<()> {
                 // macOS: the app moves the window from its own title bar.
                 app_owns_titlebar_drag: true,
                 // Overridable so that window-manager rules can target dev builds (used for UI screenshots).
-                app_id: Some(std::env::var("FERN_APP_ID").unwrap_or_else(|_| "tend".into())),
+                app_id: Some(std::env::var("TEND_APP_ID")
+                    .or_else(|_| std::env::var("FERN_APP_ID"))
+                    .unwrap_or_else(|_| "tend".into())),
                 window_min_size: Some(size(px(900.), px(400.))),
                 ..Default::default()
             },
