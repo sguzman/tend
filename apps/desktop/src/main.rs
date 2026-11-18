@@ -80,7 +80,7 @@ pub fn data_dir() -> Result<std::path::PathBuf> {
     if let Some(dir) = portable::data_dir() {
         return Ok(dir.to_owned());
     }
-    Ok(dirs::data_dir().context("cannot determine the user data directory")?.join("fern-tasks"))
+    Ok(dirs::data_dir().context("cannot determine the user data directory")?.join("tend"))
 }
 
 /// Where temporary files for printing and backup exports are written.
