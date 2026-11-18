@@ -66,7 +66,7 @@ impl Theme {
     /// The default dark theme, tuned to match TickTick's dark look.
     pub fn dark() -> Self {
         Self {
-            name: "Fern Dark",
+            name: "Tend Dark",
             colors: ThemeColors {
                 background: rgb(0x1b1c20).into(),
                 sidebar_background: rgb(0x16171a).into(),
@@ -101,7 +101,7 @@ impl Theme {
     /// The light theme, after TickTick's default light look.
     pub fn light() -> Self {
         Self {
-            name: "Fern Light",
+            name: "Tend Light",
             colors: ThemeColors {
                 background: rgb(0xffffff).into(),
                 sidebar_background: rgb(0xf1f2f4).into(),
