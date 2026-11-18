@@ -95,14 +95,21 @@ EOF
       '';
     in
     {
-      packages.${system}.tend = tend;
-      packages.${system}.default = tend;
-
-      apps.${system}.default = {
-        type = "app";
-        program = "${tend}/bin/tend";
+      packages.${system} = {
+        inherit tend;
+        default = tend;
       };
-      apps.${system}.tend = self.apps.${system}.default;
+
+      apps.${system} = {
+        default = {
+          type = "app";
+          program = "${tend}/bin/tend";
+        };
+        tend = {
+          type = "app";
+          program = "${tend}/bin/tend";
+        };
+      };
 
       checks.${system}.tend-build = tend;
 
