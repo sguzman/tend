@@ -186,7 +186,7 @@ impl Render for TitleBar {
                     .h_full()
                     .gap_2()
                     .map(|title| if mac && !fullscreen { title.pl(TRAFFIC_LIGHT_PADDING) } else { title.pl_3() })
-                    .child(gpui::img("icon/icon-64.png").size(px(16.)).flex_none())
+                    .child(gpui::svg().path("icon/tend.svg").size(px(16.)).flex_none())
                     .child(Label::new("Tend").size(LabelSize::Small).color(Color::Muted)),
             )
             .children(update_buttons)
