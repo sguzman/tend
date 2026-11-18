@@ -32,7 +32,9 @@ pub fn open(main: WindowHandle<AppView>, cx: &mut App) {
         window_bounds: Some(WindowBounds::Windowed(bounds)),
         titlebar: None,
         kind: WindowKind::PopUp,
-        app_id: Some(std::env::var("FERN_APP_ID").unwrap_or_else(|_| "fern-tasks".into())),
+        app_id: Some(std::env::var("TEND_APP_ID")
+            .or_else(|_| std::env::var("FERN_APP_ID"))
+            .unwrap_or_else(|_| "tend".into())),
         ..Default::default()
     };
     match cx.open_window(options, |window, cx| cx.new(|cx| QuickAddWindow::new(main, window, cx))) {

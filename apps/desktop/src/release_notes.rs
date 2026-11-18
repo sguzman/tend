@@ -63,7 +63,7 @@ pub fn installed(store: &Store) -> Option<ReleaseNotes> {
 }
 
 fn bundled() -> Option<ReleaseNotes> {
-    let url = format!("https://github.com/atabits/fern/releases/tag/v{CURRENT_VERSION}");
+    let url = format!("https://github.com/sguzman/tend/releases/tag/v{CURRENT_VERSION}");
     let notes = ReleaseNotes::new(CURRENT_VERSION, &url, BUNDLED_NOTES);
     (!notes.markdown.is_empty()).then_some(notes)
 }

@@ -45,10 +45,13 @@ nom build .#tend
 nix run .#tend
 ```
 
-This integration is **in progress** and not yet claimed to build successfully.
-Before relying on the package, follow the results in
-[the roadmap](ROADMAP.md), the [Nix guide](docs/nix.md), and the development
-branch's CI checks.
+The branded application has passed `crate2nix` and `nix flake check`
+in GitHub Actions, and its Nix launcher has opened successfully on
+EndeavourOS/Hyprland with NVIDIA. Task creation, notes, subtasks, and
+persistence across restart have passed interactive QA. Reminders, deep
+links, backup/restore through the GUI, and Home Manager deployment are
+still being validated. See the [Linux QA guide](docs/qa-linux.md),
+[roadmap](ROADMAP.md), and [Nix guide](docs/nix.md).
 
 Upstream also supports ordinary `cargo` builds:
 
@@ -78,8 +81,11 @@ upstream. Tend aims to keep downstream changes small, preserve compatibility
 where practical, and integrate upstream fixes after review. The original
 project's authorship is not claimed as Tend's authorship.
 
-See [ROADMAP.md](ROADMAP.md) for outstanding work. New features will be
-considered only after using the application and identifying concrete needs.
+See [ROADMAP.md](ROADMAP.md) for outstanding work, the
+[safe Fern-to-Tend migration guide](docs/migration.md) for existing data,
+and the [upstream maintenance policy](docs/upstream.md) for maintaining
+the fork. New features will be considered only after using the application
+and identifying concrete needs.
 
 ## License and credits
 

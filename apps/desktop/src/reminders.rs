@@ -154,7 +154,7 @@ fn show(title: String, body: String, actions: Vec<(&'static str, &'static str)>,
     let (tx, rx) = futures::channel::oneshot::channel();
     std::thread::spawn(move || {
         let mut notification = notify_rust::Notification::new();
-        notification.appname("Fern").summary(&title).body(&body).icon("alarm-clock");
+        notification.appname("Tend").summary(&title).body(&body).icon("alarm-clock");
         // Settings → Notifications → "Constant Reminder": the notification stays until dismissed.
         if constant {
             notification.timeout(notify_rust::Timeout::Never);

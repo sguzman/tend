@@ -133,7 +133,7 @@ impl SettingsWindow {
             cx.subscribe(&input, |this: &mut Self, _, _: &crate::text_input::Changed, cx| this.save_sync(cx)).detach();
             input
         };
-        let sync_server = field("https://fern.example.org", config.server, false, cx);
+        let sync_server = field("https://tend.example.org", config.server, false, cx);
         let sync_token = field("", config.token, true, cx);
         let updates = crate::updater::updater(cx).map(|updater| cx.observe(&updater, |_, _, cx| cx.notify()));
         let feeds = crate::subscriptions::feeds(cx).map(|feeds| cx.observe(&feeds, |_, _, cx| cx.notify()));
@@ -211,7 +211,7 @@ impl SettingsWindow {
     /// "Generate Backup": all data in one file, saved where the user chooses.
     fn generate_backup(&mut self, cx: &mut Context<Self>) {
         let contents = crate::scratch_dir().map_err(anyhow::Error::from).and_then(|dir| {
-            let temp = dir.join(format!("fern-backup-{}.db", std::process::id()));
+            let temp = dir.join(format!("tend-backup-{}.db", std::process::id()));
             let attachments = crate::attachments_dir().ok();
             let contents = self.store.backup_to(&temp, attachments.as_deref()).and_then(|()| Ok(std::fs::read(&temp)?));
             std::fs::remove_file(&temp).ok();
@@ -219,7 +219,7 @@ impl SettingsWindow {
         });
         match contents {
             Ok(bytes) => {
-                let name = format!("fern-backup-{}.db", chrono::Local::now().format("%Y-%m-%d"));
+                let name = format!("tend-backup-{}.db", chrono::Local::now().format("%Y-%m-%d"));
                 crate::export::save_as(name, bytes, cx, |this, result, cx| {
                     this.backup_message = crate::export::outcome(result, i18n::t(cx));
                     cx.notify();
@@ -591,7 +591,7 @@ impl SettingsWindow {
                                         .min_w(px(110.))
                                         .text_size(px(13.))
                                         .text_color(if install { colors.text } else { colors.text_muted })
-                                        .child(message.unwrap_or_else(|| format!("Fern {}", env!("CARGO_PKG_VERSION")))),
+                                        .child(message.unwrap_or_else(|| format!("Tend {}", env!("CARGO_PKG_VERSION")))),
                                 )
                                 .child(h_flex().gap_2().flex_none().flex_wrap()
                                     .children(notes.map(|notes| {
@@ -1485,7 +1485,7 @@ impl SettingsWindow {
                         .items_center()
                         .gap_1()
                         .py_4()
-                        .child(Label::new("Fern").size(LabelSize::Large).weight(FontWeight::SEMIBOLD))
+                        .child(Label::new("Tend").size(LabelSize::Large).weight(FontWeight::SEMIBOLD))
                         .child(Label::new(strings.about_tagline).color(Color::Muted)),
                 )
                 .child(

@@ -4,8 +4,10 @@ Tend targets **x86_64-linux** first, with **crate2nix 0.15.0** and
 one Nix derivation per Rust crate. It does **not** use Crane or fall back to
 a single `cargo build` derivation.
 
-> The Nix build remains unverified until CI passes and the application has
-> been launched on the target Hyprland machine.
+> The base `tend/dev` branch passed `nix build`, `nix flake check`,
+> crate2nix graph freshness, and Cargo CI on November 18, 2026.
+> The branded branch still needs integration CI and a running GUI check
+> on the actual Hyprland/NVIDIA machine before release.
 
 ## Build and run
 
@@ -74,8 +76,8 @@ until renaming becomes worth the upstream merge cost.
 
 ## Verification
 
-GitHub Actions must pass `nix build .#tend` and `nix flake check` before
-merging. Also verify the generated dependency graph against the committed
+The base branch passed `nix build .#tend` and `nix flake check`.
+The combined branding changes must pass the same checks before merging. Also verify the generated dependency graph against the committed
 `Cargo.nix`, then test launch, fonts, notifications, scaling, persistence,
 and backups under Hyprland/Wayland on the actual NVIDIA machine.
 
