@@ -52,7 +52,14 @@ impl Global for GlobalUpdater {}
 
 /// Starts the checks, unless this is a development build.
 pub fn init(store: Rc<Store>, cx: &mut App) {
-    let install = Install::current();
+    // Nix-managed Tend installations must never fetch or replace themselves
+    // with a binary from the original Fern release channel.
+    // Keep daily backups enabled; FERN_DEV_STATE would also suppress them.
+    let install = if std::env::var_os("TEND_NIX_MANAGED").is_some() {
+        None
+    } else {
+        Install::current()
+    };
     if let Some(install) = &install {
         install.clean_up();
     }
