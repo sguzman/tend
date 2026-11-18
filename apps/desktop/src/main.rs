@@ -69,11 +69,11 @@ use assets::Assets;
 use crate::i18n::{CurrentLocale, Locale};
 
 
-/// Where Fern keeps its data.
+/// Where Tend keeps its data.
 pub fn data_dir() -> Result<std::path::PathBuf> {
-    // Debug builds can be pointed at throwaway data, so that checking a change leaves the real
-    // data alone.
-    #[cfg(debug_assertions)]
+    // Explicit overrides must work in release builds too, including Nix
+    // packages used for disposable-profile QA. Prefer Tend's name while
+    // continuing to accept Fern's legacy override.
     if let Some(dir) = std::env::var_os("TEND_DATA_DIR")
         .or_else(|| std::env::var_os("FERN_DATA_DIR"))
     {
