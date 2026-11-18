@@ -15,7 +15,7 @@ pub struct UreqHttpClient {
 
 impl UreqHttpClient {
     pub fn new() -> Arc<Self> {
-        let user_agent = HeaderValue::from_str(&format!("fern/{}", env!("CARGO_PKG_VERSION"))).expect("the version is ASCII");
+        let user_agent = HeaderValue::from_str(&format!("tend/{}", env!("CARGO_PKG_VERSION"))).expect("the version is ASCII");
         Arc::new(Self { user_agent })
     }
 }
