@@ -1,4 +1,4 @@
-//! Fern's own title bar and window frame, drawn in the app's theme on every platform instead of
+//! Tend's own title bar and window frame, drawn in the app's theme on every platform instead of
 //! the system's: the window is opened without the system title bar (`window_options`), and this
 //! module draws the bar, the window buttons and, on Linux, the frame's border, shadow and resize
 //! edges. After Zed's `platform_title_bar` and `client_side_decorations`.
@@ -47,7 +47,7 @@ pub fn frame_vertical_inset(window: &Window) -> Pixels {
 /// The window options that hide the system title bar.
 pub fn window_options() -> (TitlebarOptions, WindowDecorations) {
     let titlebar = TitlebarOptions {
-        title: Some("Fern".into()),
+        title: Some("Tend".into()),
         appears_transparent: true,
         traffic_light_position: Some(TRAFFIC_LIGHTS),
     };
@@ -187,7 +187,7 @@ impl Render for TitleBar {
                     .gap_2()
                     .map(|title| if mac && !fullscreen { title.pl(TRAFFIC_LIGHT_PADDING) } else { title.pl_3() })
                     .child(gpui::img("icon/icon-64.png").size(px(16.)).flex_none())
-                    .child(Label::new("Fern").size(LabelSize::Small).color(Color::Muted)),
+                    .child(Label::new("Tend").size(LabelSize::Small).color(Color::Muted)),
             )
             .children(update_buttons)
             .children(right_buttons)
@@ -272,7 +272,7 @@ fn window_button(button: WindowButton, maximized: bool, cx: &App) -> impl IntoEl
         })
 }
 
-/// Wraps the window's content in the frame Fern draws with client-side decorations on Linux:
+/// Wraps the window's content in the frame Tend draws with client-side decorations on Linux:
 /// rounded corners, a border, a shadow, and edges that resize the window. With server-side
 /// decorations, and on macOS and Windows, the content is returned as is.
 pub fn window_frame(content: impl IntoElement, window: &mut Window, cx: &mut App) -> Stateful<Div> {
