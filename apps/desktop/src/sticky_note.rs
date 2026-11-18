@@ -89,7 +89,9 @@ pub fn open(store: Rc<Store>, id: Id, cx: &mut App) {
         window_decorations: Some(WindowDecorations::Client),
         app_owns_titlebar_drag: true,
         window_min_size: Some(size(px(MIN_WIDTH), px(COMPACT_HEIGHT))),
-        app_id: Some(std::env::var("FERN_APP_ID").unwrap_or_else(|_| "fern-tasks".into())),
+        app_id: Some(std::env::var("TEND_APP_ID")
+            .or_else(|_| std::env::var("FERN_APP_ID"))
+            .unwrap_or_else(|_| "tend".into())),
         ..Default::default()
     };
     match cx.open_window(options, |window, cx| {
