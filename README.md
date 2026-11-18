@@ -45,10 +45,11 @@ nom build .#tend
 nix run .#tend
 ```
 
-This integration is **in progress** and not yet claimed to build successfully.
-Before relying on the package, follow the results in
-[the roadmap](ROADMAP.md), the [Nix guide](docs/nix.md), and the development
-branch's CI checks.
+The base development branch has **passed** its complete `crate2nix` package
+build, `nix flake check`, and Cargo CI on GitHub Actions. These branding
+changes still need integration checks and a real desktop launch on
+EndeavourOS/Hyprland before installation is considered validated. See
+[the roadmap](ROADMAP.md) and [Nix guide](docs/nix.md) for the current state.
 
 Upstream also supports ordinary `cargo` builds:
 
