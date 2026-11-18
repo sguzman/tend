@@ -56,6 +56,12 @@
           gpui = withNativeLibraries;
           gpui_platform = withNativeLibraries;
           fern_desktop = withNativeLibraries;
+          # The font-kit/GPUI transitive dependency invokes pkg-config from
+          # its own build.rs, before the desktop crate's overrides apply.
+          "yeslogic-fontconfig-sys" = _attrs: {
+            nativeBuildInputs = [ p.pkg-config ];
+            buildInputs = [ p.fontconfig ];
+          };
         };
       };
 
